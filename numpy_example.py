@@ -28,11 +28,11 @@ for t in range(N):
         print(100 * t / N, loss)
 
     # Plot intermediate predictions
-    if t % (N//2) == 0:
+    if t % (N // 2) == 0:
         plt.plot(y_pred)
 
     # Backprop to compute gradients of a, b, c, d with respect to loss
-    grad_y_pred = 2.0 * (y_pred - y)  
+    grad_y_pred = 2.0 * (y_pred - y)
     grad_a = (grad_y_pred).sum()
     grad_b = (grad_y_pred * x).sum()
     grad_c = (grad_y_pred * x ** 2).sum()
@@ -45,8 +45,8 @@ for t in range(N):
     b -= learning_rate * grad_b
     c -= learning_rate * grad_c
     d -= learning_rate * grad_d
-    e -= learning_rate * grad_e 
-    f -= learning_rate * grad_f 
+    e -= learning_rate * grad_e
+    f -= learning_rate * grad_f
 
 print(f"Result: y = {a} + {b} x + {c} x^2 + d{d} x^3 + e{e} x^4 + f{f} x^5")
 

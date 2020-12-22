@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import torch 
+import torch
 import math
 
 
@@ -14,8 +14,8 @@ class LegendrePolynomials3(torch.autograd.Function):
     def forward(ctx, input):
         """
         In the forward pass we receive a Tensor containing the input and return
-        a Tensor containing the output. ctx is  a context object that cn be used 
-        to stash information for backward computation. You can cache arbitrary 
+        a Tensor containing the output. ctx is  a context object that cn be used
+        to stash information for backward computation. You can cache arbitrary
         objects for use in the backward pass using the ctx.save_for_backward method.
         """
         ctx.save_for_backward(input)
@@ -28,15 +28,16 @@ class LegendrePolynomials3(torch.autograd.Function):
         with respect to the output, and we need to compute the gradient of the loss
         with respect to the input.
         """
-        input, = ctx.saved_tensors
+        (input,) = ctx.saved_tensors
         return grad_output * 1.5 * (5 * input ** 2 - 1)
+
 
 dtype = torch.float
 device = torch.device("cpu")
 # device = torch.device("cuda:0")
 
 # Create Tensors to hold input and outputs
-# By default, requires_grad=False, which indicates that we do not need to 
+# By default, requires_grad=False, which indicates that we do not need to
 # compute gradients with respect to these Tensors during the backward pass.
 x = torch.linspace(-math.pi, math.pi, 2000)
 y = torch.sin(x)
@@ -81,17 +82,4 @@ for t in range(2000):
         c.grad = None
         d.grad = None
 
-print(f'Result: y = {a.item()} + {b.item()} * P3({c.item()} + {d.item()} x)')
-
-
-
-
-
-
-
-    
-
-
-
-
-
+print(f"Result: y = {a.item()} + {b.item()} * P3({c.item()} + {d.item()} x)")

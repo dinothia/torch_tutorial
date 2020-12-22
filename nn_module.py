@@ -8,25 +8,22 @@ x = torch.linspace(-math.pi, math.pi, 2000)
 y = torch.sin(x)
 
 # For this example, the output y us a linear function of (x, x^2, x^3), so
-# we can consider it as a linear layer neural network. Let's prepare the 
+# we can consider it as a linear layer neural network. Let's prepare the
 # tensor (x, x^2, x^3).
 p = torch.tensor([1, 2, 3])
 xx = x.unsqueeze(-1).pow(p)
 
-# In the above code, x.unsqueeze(-1) has shape (2000, 1), and p has shape 
+# In the above code, x.unsqueeze(-1) has shape (2000, 1), and p has shape
 # (3,), for this case, broadcasting semantics will apply to obtain a tensor
 # of shape (2000, 3)
 
-# Use the nn package to define our model as a sequence of layers. nn.Sequential 
+# Use the nn package to define our model as a sequence of layers. nn.Sequential
 # is a Module which contains other Modules, and applies them in sequence to
 # produce its output. The Linear Module computes output from input using a
 # linear function, and holds internal Tensors for its weight and bias.
 # The Flatten layer flattens the output of the linear layer to a 1D tensor.
 # to match the shape of "y"
-model = torch.nn.Sequential(
-    torch.nn.Linear(3, 1), 
-    torch.nn.Flatten(0, 1)
-)
+model = torch.nn.Sequential(torch.nn.Linear(3, 1), torch.nn.Flatten(0, 1))
 
 # The nn package also contains definitions of popular loss functions; in this
 # case we will use Mean Squared Error (MSE) as our loss function.
@@ -71,4 +68,6 @@ for t in range(2000):
 linear_layer = model[0]
 
 # For linear layer, its parameters are stored as `weight` and `bias`.
-print(f'Result: y = {linear_layer.bias.item()} + {linear_layer.weight[:, 0].item()} x + {linear_layer.weight[:, 1].item()} x^2 + {linear_layer.weight[:, 2].item()} x^3')
+print(
+    f"Result: y = {linear_layer.bias.item()} + {linear_layer.weight[:, 0].item()} x + {linear_layer.weight[:, 1].item()} x^2 + {linear_layer.weight[:, 2].item()} x^3"
+)

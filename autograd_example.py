@@ -34,15 +34,15 @@ for t in range(2000):
     if t % 100 == 99:
         print(t, loss.item())
 
-    # Use autograd to compute the backward pass. This call wil compute the 
+    # Use autograd to compute the backward pass. This call wil compute the
     # gradient of loss with respect to all Tensors with requires_grad=True.
     # After this call a.grad, b.grad, c.grad and d.grad will be Tensors holding
     # the gradient of the loss with respect to a, b, c, d respectively.
     loss.backward()
-    
+
     # Manually update weights using gradient descent. Wrap in torch.no_grad()
     # bacause weights have requires_grad=True, but we don't need to track this
-    # in autograd. 
+    # in autograd.
     with torch.no_grad():
         a -= learning_rate * a.grad
         b -= learning_rate * b.grad

@@ -6,7 +6,7 @@ import math
 class Polynomial3(torch.nn.Module):
     def __init__(self):
         """
-        In the constructor we instantiate four parameters and assign them as 
+        In the constructor we instantiate four parameters and assign them as
         member parameters.
         """
 
@@ -19,7 +19,7 @@ class Polynomial3(torch.nn.Module):
     def forward(self, x):
         """
         In the forward function we accept a Tensor of input data and we must return
-        a Tensor of output data. We can use Modules defined in the constructor as 
+        a Tensor of output data. We can use Modules defined in the constructor as
         well as arbitrary operators on Tensors.
         """
         return self.a + self.b * x + self.c * x ** 2 + self.d * x ** 3
@@ -30,17 +30,18 @@ class Polynomial3(torch.nn.Module):
         """
         return f"y = {self.a.item()} + {self.b.item()} x + {self.c.item()} x^2 + {self.d.item()} x^3"
 
+
 # Create Tensors to hold input and outputs.
 x = torch.linspace(-math.pi, math.pi, 2000)
 y = torch.sin(x)
-        
+
 # Construct our model by instantiating the class defined above
 model = Polynomial3()
 
 # Construct our loss function and an Optimizer. The call to model.parameters()
 # in the SGD constructor will contain the learnable parameters of the nn.Linear
 # module which is members of the model.
-criterion = torch.nn.MSELoss(reduction='sum')
+criterion = torch.nn.MSELoss(reduction="sum")
 optimizer = torch.optim.SGD(model.parameters(), lr=1e-6)
 
 for t in range(2000):

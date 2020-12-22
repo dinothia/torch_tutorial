@@ -40,4 +40,3 @@ for t in range(2000):
     d -= learning_rate * grad_d
 
 print(f"Result: y = {a.item()} + {b.item()} x + {c.item()} x^2 + {d.item()} x^3")
-
