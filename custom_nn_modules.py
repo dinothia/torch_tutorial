@@ -30,5 +30,31 @@ class Polynomial3(torch.nn.Module):
         """
         return f"y = {self.a.item()} + {self.b.item()} x + {self.c.item()} x^2 + {self.d.item()} x^3"
 
-
+# Create Tensors to hold input and outputs.
+x = torch.linspace(-math.pi, math.pi, 2000)
+y = torch.sin(x)
         
+# Construct our model by instantiating the class defined above
+model = Polynomial3()
+
+# Construct our loss function and an Optimizer. The call to model.parameters()
+# in the SGD constructor will contain the learnable parameters of the nn.Linear
+# module which is members of the model.
+criterion = torch.nn.MSELoss(reduction='sum')
+optimizer = torch.optim.SGD(model.parameters(), lr=1e-6)
+
+for t in range(2000):
+    # Forward pass: Compute predicted y by passing x to the model
+    y_pred = model(x)
+
+    # Compute and print loss
+    loss = criterion(y_pred, y)
+    if t % 100 == 99:
+        print(t, loss.item())
+
+    # Zero gradients, perform a backward pass, and update the weights.
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+print(f"Result: {model.string()}")
