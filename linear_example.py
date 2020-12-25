@@ -3,24 +3,24 @@ import torch
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
 from torch import optim
+import numpy as np
 import matplotlib.pyplot as plt
 import math
 
 swap_in_out = True
 # Create training data
 N = 10000
-"""
+
 A = torch.tensor([
-                [4.1, 0.1], 
-                [4, 0.15]], dtype=torch.float)
-"""
-A = torch.randn(5, 5)
+                [4, 0], 
+                [0.5, 4]], dtype=torch.float)
 
 D_I = A.shape[0]                
 D_O = A.shape[1]                
 
 b = 5
-x = torch.randn(N, D_I)
+x = torch.rand(N, D_I)
+#x = torch.randn(N, D_I)
 y = x @ A + b
 #y += 0.1 * torch.randn_like(y)
 
@@ -39,7 +39,7 @@ bs = 16
 train_ds = TensorDataset(x_train, y_train)
 train_dl = DataLoader(train_ds, shuffle=True, batch_size=bs)
 
-lr = 1e-7
+lr = 1e-3
 model = torch.nn.Sequential(
         torch.nn.Linear(D_I, D_O), 
         #torch.nn.ReLU()
@@ -49,7 +49,7 @@ loss_fn = torch.nn.MSELoss(reduction="sum")
 opt = optim.SGD(model.parameters(), lr=lr, momentum=0.9)
 
 loss_arr = []
-epochs = 200
+epochs = 50
 for epoch in range(epochs):
     for xb,yb in train_dl:
         pred = model(xb)
@@ -61,11 +61,12 @@ for epoch in range(epochs):
 
     if epoch % 10 == 9:
         loss_arr.append(loss.item())
-        print(f"epoch: {epoch}, loss: {loss.item()}")
+        print(epoch, loss.item())
 
 linear_layer = model[0]
 print(f"bias term = \n{linear_layer.bias.detach().numpy()}")
 print(f"actual weight = \n {A.detach().numpy()}")
+print(f"inv actual weight = \n {np.linalg.inv(A.detach().numpy())}")
 print(f"weights term = \n{linear_layer.weight.detach().numpy().round(2).T}")
 print(x_train[-1])
 
