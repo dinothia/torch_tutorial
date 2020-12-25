@@ -11,15 +11,18 @@ swap_in_out = True
 # Create training data
 N = 10000
 
+"""
 A = torch.tensor([
                 [4, 0], 
                 [0.5, 4]], dtype=torch.float)
+"""
+A = torch.randn(3, 3)
 
 D_I = A.shape[0]                
 D_O = A.shape[1]                
 
 b = 5
-x = torch.rand(N, D_I)
+x = torch.randn(N, D_I)
 #x = torch.randn(N, D_I)
 y = x @ A + b
 #y += 0.1 * torch.randn_like(y)
@@ -49,7 +52,7 @@ loss_fn = torch.nn.MSELoss(reduction="sum")
 opt = optim.SGD(model.parameters(), lr=lr, momentum=0.9)
 
 loss_arr = []
-epochs = 50
+epochs = 100
 for epoch in range(epochs):
     for xb,yb in train_dl:
         pred = model(xb)
@@ -61,14 +64,15 @@ for epoch in range(epochs):
 
     if epoch % 10 == 9:
         loss_arr.append(loss.item())
-        print(epoch, loss.item())
+        print(f"epoch: {epoch} loss: {loss.item()}")
 
 linear_layer = model[0]
+if swap_in_out: print("xy swapped:")
 print(f"bias term = \n{linear_layer.bias.detach().numpy()}")
 print(f"actual weight = \n {A.detach().numpy()}")
 print(f"inv actual weight = \n {np.linalg.inv(A.detach().numpy())}")
 print(f"weights term = \n{linear_layer.weight.detach().numpy().round(2).T}")
-print(x_train[-1])
+#print(x_train[-1])
 
 plt.plot(loss_arr)
 plt.show()
