@@ -58,12 +58,6 @@ for t in range(2000):
         for param in model.parameters():
             param -= learning_rate * param.grad
 
-    # Update the weights using gradient descent. Each parameter is a Tensor, so
-    # we can access its gradients like we did before.
-    with torch.no_grad():
-        for param in model.parameters():
-            param -= learning_rate * param.grad
-
 # You can access the first layer of `model` like accessing the first item of a list
 linear_layer = model[0]
 
