@@ -7,25 +7,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-swap_in_out = True
+swap_in_out = False
 # Create training data
-N = 10000
+N = 10
 
-"""
-A = torch.tensor([
-                [4, 0], 
-                [0.5, 4]], dtype=torch.float)
-"""
-A = torch.randn(20, 20)
+A = torch.randn(1, 1)
 
 D_I = A.shape[0]
 D_O = A.shape[1]
 
-b = 5
-x = torch.randn(N, D_I)
-# x = torch.randn(N, D_I)
+b = 0
+#x = torch.randn(N, D_I)
+x = torch.linspace(-5, 5, N).view(N, 1)
 y = x @ A + b
-y += 0.01 * torch.randn_like(y)
+#y += 0.01 * torch.randn_like(y)
 
 if swap_in_out:
     x_train = y
@@ -38,7 +33,7 @@ else:
     y_train = y
 
 # Add to dataloader
-bs = 16
+bs = 32
 train_ds = TensorDataset(x_train, y_train)
 train_dl = DataLoader(train_ds, shuffle=True, batch_size=bs)
 
@@ -46,14 +41,14 @@ train_dl = DataLoader(train_ds, shuffle=True, batch_size=bs)
 lr = 1e-3 
 model = torch.nn.Sequential(
     torch.nn.Linear(D_I, D_O),
-    # torch.nn.ReLU()
+    #torch.nn.ReLU()
 )
 
 loss_fn = torch.nn.MSELoss(reduction="mean")
 opt = optim.SGD(model.parameters(), lr=lr, momentum=0.9)
 
 loss_arr = []
-epochs = 10000
+epochs = 100
 for epoch in range(epochs):
     for xb, yb in train_dl:
         pred = model(xb)
@@ -63,9 +58,9 @@ for epoch in range(epochs):
         opt.step()
         opt.zero_grad()
 
-    if epoch % 10 == 9:
-        loss_arr.append(loss.item())
-        print(f"epoch: {epoch} loss: {loss.item()}")
+    #if epoch % 10 == 9:
+    loss_arr.append(loss.item())
+    print(f"epoch: {epoch} loss: {loss.item()}")
 
 linear_layer = model[0]
 
